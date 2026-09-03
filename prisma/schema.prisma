@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+}
+
+enum RegistrantStatus {
+  NEW
+  CONTACTED
+  CONFIRMED
+  ATTENDED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+
+  assigned    Registrant[]  @relation("AssignedAdmin")
+  notes       FollowUpNote[]
+  registrant  Registrant?   @relation("PromotedFrom")
+}
+
+model Registrant {
+  id          String            @id @default(cuid())
+  fullName    String
+  phone       String
+  email       String?
+  homeChurch  String?
+  prayerFocus String?
+  status      RegistrantStatus  @default(NEW)
+  contactedAt DateTime?
+  createdAt   DateTime          @default(now())
+
+  assignedAdminId String?
+  assignedAdmin   User?   @relation("AssignedAdmin", fields: [assignedAdminId], references: [id])
+
+  promotedUserId String? @unique
+  promotedUser   User?   @relation("PromotedFrom", fields: [promotedUserId], references: [id])
+
+  notes FollowUpNote[]
+
+  @@index([assignedAdminId])
+  @@index([status])
+}
+
+model FollowUpNote {
+  id           String   @id @default(cuid())
+  registrantId String
+  registrant   Registrant @relation(fields: [registrantId], references: [id], onDelete: Cascade)
+  authorId     String?
+  author       User?      @relation(fields: [authorId], references: [id])
+  body         String
+  createdAt    DateTime   @default(now())
+
+  @@index([registrantId])
+}
