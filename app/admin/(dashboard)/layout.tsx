@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { auth, signOut } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { LayoutDashboard, Users, ShieldCheck, LogOut, ExternalLink } from "lucide-react";
+import AdminMobileHeader from "@/components/admin/AdminMobileHeader";
+import { signOutAction } from "./actions";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, superOnly: false },
@@ -45,12 +47,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           >
             <ExternalLink size={16} /> View site
           </Link>
-          <form
-            action={async () => {
-              "use server";
-              await signOut({ redirectTo: "/admin/login" });
-            }}
-          >
+          <form action={signOutAction}>
             <button
               type="submit"
               className="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-ink-muted hover:bg-bg-raised hover:text-ink transition-colors"
@@ -62,11 +59,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </aside>
 
       <div className="flex-1 min-w-0">
-        <header className="flex items-center justify-between border-b border-line px-6 py-4 md:hidden">
-          <p className="font-display font-bold">
-            MOTP <span className="text-ember">Admin</span>
-          </p>
-        </header>
+        <AdminMobileHeader isSuper={isSuper} onSignOut={signOutAction} />
         <header className="hidden md:flex items-center justify-end gap-3 border-b border-line px-8 py-4">
           <div className="text-right">
             <p className="text-sm text-ink">{session.user.name}</p>

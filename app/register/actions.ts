@@ -7,9 +7,8 @@ const RegistrationSchema = z.object({
   fullName: z.string().trim().min(2, "Please enter your full name."),
   phone: z
     .string()
-    .trim()
-    .min(7, "Please enter a valid phone number.")
-    .regex(/^[0-9+\-\s()]{7,20}$/, "Please enter a valid phone number."),
+    .transform((val) => val.replace(/\D/g, ""))
+    .refine((val) => val.length === 11, { message: "Phone number must be exactly 11 digits." }),
   email: z.union([z.literal(""), z.string().trim().email("Please enter a valid email.")]),
   homeChurch: z.string().trim().max(120).optional(),
   prayerFocus: z.string().trim().max(600).optional(),

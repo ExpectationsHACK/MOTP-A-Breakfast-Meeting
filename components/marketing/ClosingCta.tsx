@@ -33,7 +33,7 @@ export default function ClosingCta() {
         </p>
 
         <a
-          href="#register"
+          href="#register-bottom"
           className="mt-8 inline-flex justify-center rounded-full bg-ember-bright px-10 py-4 font-semibold text-[#1a1206] hover:bg-ember-deep hover:scale-[1.03] active:scale-[0.98] transition-all"
         >
           Reserve My Seat

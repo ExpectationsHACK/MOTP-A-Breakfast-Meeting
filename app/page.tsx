@@ -34,6 +34,12 @@ export default function Home() {
         <AboutMotp />
         <FAQ />
         <ClosingCta />
+        <RegistrationSection
+          id="register-bottom"
+          eyebrow="Last Call"
+          heading="Don't leave this page without a seat at the table."
+          body="You've read this far, so something in you already knows you need this morning. Take the next thirty seconds and register. We'll take care of the rest, breakfast included."
+        />
       </main>
       <Footer />
     </>

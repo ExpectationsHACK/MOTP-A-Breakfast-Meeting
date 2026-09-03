@@ -62,7 +62,18 @@ export default function RegistrationForm() {
       </Field>
 
       <Field id="phone" label="Phone Number" error={state.fieldErrors?.phone}>
-        <input id="phone" name="phone" type="tel" required className={inputClass} placeholder="080..." />
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          inputMode="numeric"
+          required
+          maxLength={11}
+          pattern="[0-9]{11}"
+          title="Enter an 11-digit phone number"
+          className={inputClass}
+          placeholder="08012345678"
+        />
       </Field>
 
       <Field id="email" label="Email" optional error={state.fieldErrors?.email}>
