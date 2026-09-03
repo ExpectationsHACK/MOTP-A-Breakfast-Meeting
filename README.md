@@ -25,15 +25,18 @@ database.
 - **Marketing site** (`app/page.tsx` + `components/marketing/*`) — hero, the problem/promise/
   experience/solution sections, who-should-attend, event details with a live countdown, FAQ, and
   the registration form, all pulled from the conference copy.
-- **Registration** (`app/register/actions.ts`) — a server action validates and writes each
-  signup straight to the database. No separate confirmation email/SMS is wired up yet.
-- **Admin console** (`app/admin/`) — email/password login (Auth.js), protected by `proxy.ts`.
+- **Registration** (`app/register/actions.ts`) — a server action validates (name required, phone
+  must be exactly 11 digits) and writes each signup straight to the database. The form appears
+  twice on the page (mid-page and again near the footer). No separate confirmation email/SMS is
+  wired up yet.
+- **Admin console** (`app/admin/`) — email/password login (Auth.js), protected by `proxy.ts`, with
+  a working back button and nav drawer on mobile.
   - **Dashboard** — registration counts, unassigned count (super admin), recent signups.
-  - **Registrants** — searchable/filterable table; change status; call (`tel:`) or text (`sms:`)
-    a registrant straight from the row; export the current filter to CSV; a super admin can
+  - **Registrants** — searchable/filterable table; message a registrant on WhatsApp (`wa.me`) or
+    text (`sms:`) straight from the row; export the current filter to CSV; a super admin can
     assign a registrant to an admin for follow-up, promote a registrant to an admin account, or
     delete a registrant.
-  - **Registrant detail** — full record, follow-up notes log, same call/text/assign/promote
+  - **Registrant detail** — full record, follow-up notes log, same WhatsApp/text/assign/promote
     actions.
   - **Admins** (super admin only) — add admins directly, or promote an existing registrant (they
     need an email on file); remove an admin (their assigned registrants become unassigned).
@@ -46,9 +49,11 @@ database.
   currently says the breakfast is free. Change the answer in
   [`components/marketing/FAQ.tsx`](components/marketing/FAQ.tsx) if there's actually a fee.
   event date/time is stored in `EVENT_DATE_ISO` (`.env`), fed into the hero countdown.
-- **"Call or text from the admin"** opens the device's own phone/messaging app via `tel:`/`sms:`
-  links — there's no SMS-sending service (e.g. Twilio) wired up. If you want in-app bulk texting,
-  that's a separate integration.
+- **"Message a registrant"** opens a WhatsApp chat (`wa.me/234...`, converted from the stored
+  11-digit local number) or the device's SMS app via `sms:` — there's no SMS-sending service (e.g.
+  Twilio) or WhatsApp Business API wired up, so nothing sends automatically. `lib/phone.ts` is
+  where the Nigeria-specific `0` → `234` conversion happens; update it if registrants ever have
+  non-Nigerian numbers.
 - **Images** are the photos supplied in `public/` (prayer, brotherhood, breakfast, worship
   scenes). `lib/images.ts` is the one file that maps each photo to where it's used, so swapping
   in new photos later is a one-line change per section.
@@ -66,6 +71,13 @@ and treat that connection string like a password. Prisma's schema/migration file
 
 To point the app at a different Postgres database (a new environment, another provider like Neon
 or Supabase, etc.), swap `DATABASE_URL` in `.env` and run `npm run db:migrate` once against it.
+
+`DATABASE_URL` includes `&connection_limit=1&pool_timeout=20`. Prisma's official guidance for
+serverless/pooled Postgres is to keep the connection limit low (each new connection has real
+handshake cost), so leave this as-is unless you have a specific reason to raise it — a higher
+limit made requests slower and occasionally time out when tested against this database. `app/
+error.tsx` and `app/admin/error.tsx` show a "try again" screen instead of crashing if a request
+to the database ever fails or is slow.
 
 ## Environment variables (`.env`)
 
