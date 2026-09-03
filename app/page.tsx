@@ -24,12 +24,18 @@ export default function Home() {
         <EventDetails />
         <RegistrationCard />
         <WhyItMatters />
+        <RegistrationSection />
         <TheProblem />
         <ThePromise />
         <WhoShouldAttend />
         <Experience />
         <CoreSolution />
-        <RegistrationSection />
+        <RegistrationSection
+          id="register-mid"
+          eyebrow="Come As You Are"
+          heading="The table is already set for you."
+          body="You don't need a perfect prayer life or all the answers to belong here. Come tired, come unsure, come exactly as you are. Register below and we'll save you a seat."
+        />
         <WhatWePrayAbout />
         <AboutMotp />
         <FAQ />
