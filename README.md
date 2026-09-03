@@ -7,7 +7,7 @@ registration form, and an admin console for managing registrants and follow-up.
 
 ```bash
 npm install
-npm run db:migrate   # creates the local SQLite database
+npm run db:migrate   # applies the schema to the Postgres database in DATABASE_URL
 npm run db:seed      # creates the first super admin account
 npm run dev
 ```
@@ -59,11 +59,13 @@ database.
 
 ## Database
 
-Local development uses SQLite (`prisma/dev.db`, gitignored). **SQLite will not persist on
-serverless hosts like Vercel** — before deploying, switch `datasource db` in
-`prisma/schema.prisma` to `postgresql` and point `DATABASE_URL` at a hosted Postgres instance
-(Neon, Supabase, Vercel Postgres all have free tiers), then run `npm run db:migrate` once against
-it.
+The app runs on **Postgres** (Prisma Postgres, a hosted database), configured via `DATABASE_URL`
+in `.env`. That URL contains a live credential — never commit `.env` (it's already gitignored)
+and treat that connection string like a password. Prisma's schema/migration files live in
+`prisma/` and are safe to commit; only the connection string itself is secret.
+
+To point the app at a different Postgres database (a new environment, another provider like Neon
+or Supabase, etc.), swap `DATABASE_URL` in `.env` and run `npm run db:migrate` once against it.
 
 ## Environment variables (`.env`)
 
@@ -77,7 +79,8 @@ it.
 ## Deploying
 
 1. Push this repo to GitHub.
-2. Provision a Postgres database (see above) and update `prisma/schema.prisma` + `DATABASE_URL`.
-3. Deploy to Vercel (or any Node host), setting the environment variables above.
-4. Run `npx prisma migrate deploy` against the production database, then `npm run db:seed` once
-   to create the first admin.
+2. Deploy to Vercel (or any Node host), setting the environment variables above (same
+   `DATABASE_URL` to share the current database, or a fresh Postgres instance for a separate
+   production environment).
+3. Run `npx prisma migrate deploy` against that database, then `npm run db:seed` once to create
+   the first admin (skip this if reusing the current database — the admin already exists).
