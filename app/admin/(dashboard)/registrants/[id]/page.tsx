@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Church } from "lucide-react";
 import StatusSelect from "@/components/admin/StatusSelect";
 import AssignSelect from "@/components/admin/AssignSelect";
 import PromoteButton from "@/components/admin/PromoteButton";
@@ -65,7 +65,9 @@ export default async function RegistrantDetailPage({
           {registrant.homeChurch && (
             <div>
               <p className="text-xs uppercase tracking-wider text-ink-faint mb-1.5">Church / Fellowship</p>
-              <p className="text-sm text-ink">{registrant.homeChurch}</p>
+              <p className="flex items-center gap-1.5 text-sm text-ink">
+                <Church size={14} className="shrink-0 text-ember" /> {registrant.homeChurch}
+              </p>
             </div>
           )}
           <div>

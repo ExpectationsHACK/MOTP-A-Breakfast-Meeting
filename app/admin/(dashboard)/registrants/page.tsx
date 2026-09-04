@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { Download, Search } from "lucide-react";
+import { Download, Search, Church } from "lucide-react";
 import StatusSelect from "@/components/admin/StatusSelect";
 import AssignSelect from "@/components/admin/AssignSelect";
 import PromoteButton from "@/components/admin/PromoteButton";
@@ -109,12 +109,71 @@ export default async function RegistrantsPage({
         </button>
       </form>
 
-      <div className="overflow-x-auto rounded-2xl border border-line">
+      {/* Mobile: card list */}
+      <div className="space-y-3 md:hidden">
+        {registrants.map((r) => (
+          <div key={r.id} className="rounded-2xl border border-line-strong bg-bg-raised/40 p-4 space-y-3">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <Link
+                  href={`/admin/registrants/${r.id}`}
+                  className="font-display font-semibold text-ink hover:text-ember break-words"
+                >
+                  {r.fullName}
+                </Link>
+                {r.homeChurch && (
+                  <p className="mt-1 flex items-center gap-1.5 text-xs text-ink-muted">
+                    <Church size={12} className="shrink-0 text-ember" /> {r.homeChurch}
+                  </p>
+                )}
+              </div>
+              <StatusSelect registrantId={r.id} value={r.status} />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <ContactLinks phone={r.phone} />
+              <span className="text-sm text-ink-muted">{r.phone}</span>
+            </div>
+
+            {r.prayerFocus && (
+              <p className="border-l-2 border-ember/50 pl-3 text-xs italic text-ink-muted line-clamp-3">
+                &ldquo;{r.prayerFocus}&rdquo;
+              </p>
+            )}
+
+            {isSuper && (
+              <div>
+                <p className="mb-1 text-[10px] uppercase tracking-wider text-ink-faint">Assigned to</p>
+                <AssignSelect registrantId={r.id} adminId={r.assignedAdminId} admins={admins} />
+              </div>
+            )}
+
+            <div className="flex items-center justify-between border-t border-line pt-3">
+              <span className="text-xs text-ink-faint">
+                {r.createdAt.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+              </span>
+              <div className="flex items-center gap-2">
+                {isSuper && <PromoteButton registrantId={r.id} disabled={!!r.promotedUserId} />}
+                {isSuper && <DeleteButton registrantId={r.id} name={r.fullName} />}
+              </div>
+            </div>
+          </div>
+        ))}
+        {registrants.length === 0 && (
+          <p className="rounded-2xl border border-line p-8 text-center text-sm text-ink-muted">
+            No registrants match these filters.
+          </p>
+        )}
+      </div>
+
+      {/* Desktop: table */}
+      <div className="hidden overflow-x-auto rounded-2xl border border-line md:block">
         <table className="w-full text-sm">
           <thead className="bg-bg-raised/60 text-left text-xs uppercase tracking-wider text-ink-faint">
             <tr>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Contact</th>
+              <th className="px-4 py-3">Believing God For</th>
               <th className="px-4 py-3">Status</th>
               {isSuper && <th className="px-4 py-3">Assigned To</th>}
               <th className="px-4 py-3">Registered</th>
@@ -124,17 +183,31 @@ export default async function RegistrantsPage({
           <tbody className="divide-y divide-line">
             {registrants.map((r) => (
               <tr key={r.id}>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 max-w-[14rem]">
                   <Link href={`/admin/registrants/${r.id}`} className="font-medium text-ink hover:text-ember">
                     {r.fullName}
                   </Link>
-                  {r.homeChurch && <p className="text-xs text-ink-faint">{r.homeChurch}</p>}
+                  {r.homeChurch && (
+                    <p className="mt-0.5 flex items-center gap-1 text-xs text-ink-muted">
+                      <Church size={11} className="shrink-0 text-ember" />
+                      <span className="truncate">{r.homeChurch}</span>
+                    </p>
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <ContactLinks phone={r.phone} />
                     <span className="text-ink-muted text-xs">{r.phone}</span>
                   </div>
+                </td>
+                <td className="px-4 py-3 max-w-[16rem]">
+                  {r.prayerFocus ? (
+                    <p className="line-clamp-2 text-xs italic text-ink-muted" title={r.prayerFocus}>
+                      &ldquo;{r.prayerFocus}&rdquo;
+                    </p>
+                  ) : (
+                    <span className="text-xs text-ink-faint">&mdash;</span>
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   <StatusSelect registrantId={r.id} value={r.status} />
