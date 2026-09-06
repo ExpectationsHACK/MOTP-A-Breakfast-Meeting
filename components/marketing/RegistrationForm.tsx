@@ -50,7 +50,7 @@ export default function RegistrationForm() {
 
   if (state.status === "success") {
     return (
-      <div className="rounded-3xl border border-ember/40 bg-bg-raised/70 p-10 text-center">
+      <div className="rounded-3xl border border-ember/40 bg-bg-raised/70 p-6 sm:p-10 text-center">
         <CheckCircle2 className="mx-auto text-ember" size={40} />
         <h3 className="mt-4 font-display text-2xl font-bold">You&rsquo;re on the list.</h3>
         <p className="mt-2 text-ink-muted">{state.message}</p>
@@ -59,9 +59,9 @@ export default function RegistrationForm() {
           href={WHATSAPP_GROUP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 font-semibold text-white hover:bg-[#1fb959] hover:scale-[1.03] active:scale-[0.98] transition-all"
+          className="mt-6 inline-flex w-full sm:w-auto items-center justify-center gap-2 whitespace-nowrap rounded-full bg-[#25D366] px-4 sm:px-6 py-3 sm:py-3.5 text-sm sm:text-base font-semibold text-white hover:bg-[#1fb959] hover:scale-[1.03] active:scale-[0.98] transition-all"
         >
-          <WhatsAppIcon size={18} /> Join the MOTP WhatsApp Group
+          <WhatsAppIcon size={17} className="shrink-0" /> Join Our WhatsApp Group
         </a>
         <p className="mt-3 text-xs text-ink-faint">
           Stay updated on everything happening before the breakfast meeting.
