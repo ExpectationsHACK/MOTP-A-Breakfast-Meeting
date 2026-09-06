@@ -4,6 +4,9 @@ import { useActionState } from "react";
 import { useRef, useEffect } from "react";
 import { registerAttendee, type RegistrationState } from "@/app/register/actions";
 import { CheckCircle2 } from "lucide-react";
+import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
+
+const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/D5ukgRmxjHj7UQKn1VjT1R";
 
 const initialState: RegistrationState = { status: "idle" };
 
@@ -51,6 +54,18 @@ export default function RegistrationForm() {
         <CheckCircle2 className="mx-auto text-ember" size={40} />
         <h3 className="mt-4 font-display text-2xl font-bold">You&rsquo;re on the list.</h3>
         <p className="mt-2 text-ink-muted">{state.message}</p>
+
+        <a
+          href={WHATSAPP_GROUP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 font-semibold text-white hover:bg-[#1fb959] hover:scale-[1.03] active:scale-[0.98] transition-all"
+        >
+          <WhatsAppIcon size={18} /> Join the MOTP WhatsApp Group
+        </a>
+        <p className="mt-3 text-xs text-ink-faint">
+          Stay updated on everything happening before the breakfast meeting.
+        </p>
       </div>
     );
   }
