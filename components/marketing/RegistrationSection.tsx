@@ -22,8 +22,8 @@ export default function RegistrationSection({
           <p className="mt-6 text-ink-muted leading-relaxed">{body}</p>
         </div>
 
-        <div className="rounded-3xl border border-line-strong bg-bg-raised p-6 sm:p-8 shadow-xl shadow-black/5">
-          <h3 className="font-display text-xl font-bold mb-6">Register for the Breakfast Meeting</h3>
+        <div className="rounded-3xl bg-gradient-to-br from-ember-bright to-[var(--accent-rust)] p-6 sm:p-8 shadow-xl shadow-black/20">
+          <h3 className="font-display text-xl font-bold mb-6 text-white">Register for the Breakfast Meeting</h3>
           <RegistrationForm />
         </div>
       </div>

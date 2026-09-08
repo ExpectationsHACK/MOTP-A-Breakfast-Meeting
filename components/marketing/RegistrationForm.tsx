@@ -25,18 +25,18 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-ink">
+      <label htmlFor={id} className="block text-sm font-medium text-white">
         {label}
-        {optional && <span className="text-ink-faint font-normal"> (optional)</span>}
+        {optional && <span className="text-white/70 font-normal"> (optional)</span>}
       </label>
       <div className="mt-1.5">{children}</div>
-      {error && <p className="mt-1.5 text-sm text-red-400">{error}</p>}
+      {error && <p className="mt-1.5 text-sm font-medium text-[#fff1ee]">{error}</p>}
     </div>
   );
 }
 
 const inputClass =
-  "w-full rounded-xl border border-line-strong bg-bg px-4 py-3 text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-ember";
+  "w-full rounded-xl border border-white/20 bg-bg px-4 py-3 text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-white/70";
 
 export default function RegistrationForm() {
   const [state, formAction, pending] = useActionState(registerAttendee, initialState);
@@ -115,18 +115,18 @@ export default function RegistrationForm() {
       </Field>
 
       {state.status === "error" && state.message && (
-        <p className="text-sm text-red-400">{state.message}</p>
+        <p className="text-sm font-medium text-[#fff1ee]">{state.message}</p>
       )}
 
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-full bg-ember-bright px-8 py-4 font-semibold text-[#1a1206] hover:bg-ember-deep transition-colors disabled:opacity-60"
+        className="w-full rounded-full bg-white px-8 py-4 font-semibold text-[var(--accent-rust)] hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60"
       >
         {pending ? "Reserving your seat..." : "Reserve My Seat"}
       </button>
 
-      <p className="text-center text-xs text-ink-faint">
+      <p className="text-center text-xs text-white/70">
         We&rsquo;ll only use this to confirm your seat and follow up about the breakfast meeting.
       </p>
     </form>
